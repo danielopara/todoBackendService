@@ -8,14 +8,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TodoService {
     @Autowired
     TodoRepository todoRepository;
-    Todo todo;
 
     public Todo addTodo(Todo todo,@AuthenticationPrincipal UserDetails userDetails){
+        Long maxTaskId = todoRepository.findMaxTaskId(userDetails.getUsername());
+        Long newTaskId = (maxTaskId != null) ? maxTaskId + 1 : 1;
         todo.setEmail(userDetails.getUsername());
+        todo.setTaskId(newTaskId);
         return todoRepository.save(todo);
+    }
+
+    public List<Todo> allTodosByEmail( String userEmail){
+        return todoRepository.findByEmail(userEmail);
     }
 }
