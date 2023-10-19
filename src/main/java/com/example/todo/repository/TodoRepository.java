@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-    List<Todo> findByEmail(String email);
+    Optional<Todo> findByEmail(String email);
 
     @Query("SELECT MAX(t.taskId) FROM Todo t  WHERE t.email = :email")
     Long findMaxTaskId(String email);

@@ -13,6 +13,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -40,4 +42,16 @@ public class Todo {
     private Date createdAt;
 
     private Date finishedDate;
+
+    @PreUpdate
+    public void updateDate(){
+        Date currentDate = new Date();
+        if(isActive){
+            if(finishedDate == null){
+                finishedDate = currentDate;
+            } else {
+                finishedDate = null;
+            }
+        }
+    }
 }
